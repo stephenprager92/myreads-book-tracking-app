@@ -1,8 +1,10 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
-import BookShelf from './BookShelf.js'
-// import * as BooksAPI from './BooksAPI'
+import BookShelf from './BookShelf'
+import BookSearch from './BookSearch'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
+import Title from './Title'
 
 class BooksApp extends React.Component {
   state = {
@@ -19,32 +21,11 @@ class BooksApp extends React.Component {
       <div className="app">
         {/*Here we are adding Routes to replace the state dependent page management */}
         <Route path="/search" render={() => ( 
-          <div className="search-books">
-            <div className="search-books-bar">
-              {/* Links to search route */}
-              <Link className="close-search" to="/">Close</Link>
-              <div className="search-books-input-wrapper">
-              {/*
-                NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                You can find these search terms here:
-                https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                you don't find a specific author or title. Every search is limited by search terms.
-              */}
-                <input type="text" placeholder="Search by title or author"/>
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
+          <BookSearch/>
         )}/>
         <Route exact path="/" render={() => (
           <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
+            <Title/>
             <div className="list-books-content">
               <div>
                 <BookShelf
