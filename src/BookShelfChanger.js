@@ -11,7 +11,7 @@ class BookShelfChanger extends React.Component {
 
     /* Shelf changer only requires a list of shelves as a prop */
 	static propTypes = {
-		shelves: PropTypes.array.isRequired
+		//shelves: PropTypes.array.isRequired
 	}
 
 	render() {
@@ -27,3 +27,5 @@ class BookShelfChanger extends React.Component {
                </div>
 	}
 }
+
+export default BookShelfChanger

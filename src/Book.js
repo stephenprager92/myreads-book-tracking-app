@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import BookShelfChanger from './BookShelfChanger.js'
 
 /* 
 	Book.js
@@ -9,30 +10,32 @@ import PropTypes from 'prop-types'
 
 class Book extends React.Component {
 
-    /* Book requires a title, an author, and an image URL as props */
+    /* Book requires a title, an author, a height / width, and an image URL as props */
 	static propTypes = {
 		title: PropTypes.string.isRequired,
 		author: PropTypes.string.isRequired,
-		width: PropTypes.num.isRequired,
+		height: PropTypes.number.isRequired,
+		width: PropTypes.number.isRequired,
 		imageURL: PropTypes.string.isRequired
 	}
 
 	render() {
+
+		const { title, author, height, width, imageURL } = this.props
+
 		return <div className="book">
 	               <div className="book-top">
-	                   <div className="book-cover" style={{ width: {/*128*/}, height: 193, backgroundImage: 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")' }}></div>
-                       <div className="book-shelf-changer">
-	                       <select>
-	                           <option value="move" disabled>Move to...</option>
-                               <option value="currentlyReading">Currently Reading</option>
-                               <option value="wantToRead">Want to Read</option>
-                               <option value="read">Read</option>
-                               <option value="none">None</option>
-                           </select>
-                       </div>
+	                   <div className="book-cover" 
+	                        style={{ width: width, 
+                                     height: height, 
+                                     backgroundImage:`url(${imageURL})`
+                                  }}></div>
+                       <BookShelfChanger/>
                     </div>
-                    <div className="book-title">To Kill a Mockingbird</div>
-                    <div className="book-authors">Harper Lee</div>
-                </div>
+                   <div className="book-title">{title}</div>
+                   <div className="book-authors">{author}</div>
+               </div>
     }
 }
+
+export default Book
