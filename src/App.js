@@ -1,4 +1,5 @@
 import React from 'react'
+import { Route } from 'react-router-dom'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
 
@@ -16,6 +17,9 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
+        {/*Here we are adding a Route to replace the current state dependent management 
+          <Route exact path="/" render={() => ( 
+        */}
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
