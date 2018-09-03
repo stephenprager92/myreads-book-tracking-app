@@ -22,15 +22,13 @@ class BookShelf extends React.Component {
 	               <h2 className="bookshelf-title">{this.props.title}</h2>
                    <div className="bookshelf-books">
 	                   <ol className="books-grid">
-	                   {this.props.books.map((book) => 
-			               <li key={book.title}>
+	                   {this.props.books.map((book) =>  
+			               <li key={book.id}>
 		                       <Book title={book.title}
-			                         height={book.height}
-			                         width={book.width}
-			                         imageURL={book.imageURL}
-			                         author={book.author}
+			                         imageURL={book.imageLinks.smallThumbnail}
+			                         authors={book.authors}
 			                    />
-		                    </li>
+			                </li>
 	                   	)}
 	                   </ol>
 	               </div>
