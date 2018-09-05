@@ -10,21 +10,28 @@ import BookShelfChanger from './BookShelfChanger.js'
 
 class Book extends React.Component {
 
-    /* Book requires a title, an author and an image URL as props */
+    /* Book required props */
 	static propTypes = {
 		title: PropTypes.string.isRequired,
 		authors: PropTypes.array.isRequired,
-		imageURL: PropTypes.string.isRequired
+		imageURL: PropTypes.string.isRequired,
+		onUpdateShelf: PropTypes.func.isRequired,
+		shelf: PropTypes.string.isRequired,
+		bookItem: PropTypes.object.isRequired
 	}
 
 	render() {
 
-		const { title, authors, imageURL } = this.props
+		const { title, authors, onUpdateShelf, imageURL, shelf, bookItem } = this.props
 
 		return <div className="book">
 			       <div className="book-top">
 			           <div className="book-cover" style={{ width: 128, height: 192, backgroundImage:`url(${imageURL})` }}></div>
-                       <BookShelfChanger/>
+                       <BookShelfChanger
+	                       onUpdateShelf={onUpdateShelf}
+	                       shelf={shelf}
+	                       bookItem={bookItem}
+                       />
                    </div>
                    <div className="book-title">{title}</div>
                    <div className="book-authors">

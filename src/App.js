@@ -7,6 +7,7 @@ import './App.css'
 import Title from './components/Title'
 
 class BooksApp extends React.Component {
+
   state = {
     /* 
       Collection of all books in app (both displayed and not)
@@ -16,15 +17,37 @@ class BooksApp extends React.Component {
     books: []
   }
 
-  /* 
-    Perform the asynchronous fetch from the BooksAPI 
-    (AFTER the app component initially mounts) to get the books data
+  /*
+    Helper method - asynchronously retrieve book data from the BooksAPI
+    Once retrieved, set the new state.
   */
-  componentDidMount() {
+  retrieveBooks() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books : books })
-      console.log(this.state.books)
     })
+  }
+
+  /* 
+    Retrieve books for the first time AFTER the app component initially mounts
+  */
+  componentDidMount() {
+    this.retrieveBooks()
+  }
+
+  /*
+    Update a book's shelf first in the API, then in the local state
+    Used by the BookShelfChanger components
+
+    NOTE: I'm not sure what's better practice here, updating the local shelf first
+    or updating the API. Doing the local shelf first has the disadvantage of potentially
+    not saving a change you thought you made (if you can't reach the server), 
+    while doing the API first takes longer. Ultimately made a judgment call.
+  */
+  updateShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf)
+            .then(() => {
+            this.retrieveBooks()
+            })
   }
 
   render() {
@@ -44,18 +67,21 @@ class BooksApp extends React.Component {
                   className="bookshelf"
                   title="Currently Reading"
                   books={this.state.books.filter((book) => book.shelf === "currentlyReading")}
+                  updateShelf={this.updateShelf}
                 />
                 {/* Filter to get the "want to read" books from the state and pass as prop to the shelf */}
                 <BookShelf
                   className="bookshelf"
                   title="Want to Read"
                   books={this.state.books.filter((book) => book.shelf === "wantToRead")}
+                  updateShelf={this.updateShelf}
                 />
                 {/* Filter to get the "read" books from the state and pass as prop to the shelf */}
                 <BookShelf
                   className="bookshelf"
                   title="Read"
                   books={this.state.books.filter((book) => book.shelf ==="read")}
+                  updateShelf={this.updateShelf}
                 />
               </div>
             </div>

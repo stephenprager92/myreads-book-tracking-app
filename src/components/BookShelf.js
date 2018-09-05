@@ -10,11 +10,11 @@ import Book from './Book.js'
 
 class BookShelf extends React.Component {
 
-    /* Book shelf requires a title and a list of books to render as props */
+    /* Book Shelf required props */
 	static propTypes = {
 		title: PropTypes.string.isRequired,
-		books: PropTypes.array.isRequired
-		// maybe pass shelves down as a prop? 
+		books: PropTypes.array.isRequired,
+		updateShelf: PropTypes.func.isRequired
 	}
 
 	render() {
@@ -27,6 +27,9 @@ class BookShelf extends React.Component {
 		                       <Book title={book.title}
 			                         imageURL={book.imageLinks.smallThumbnail}
 			                         authors={book.authors}
+			                         onUpdateShelf={this.props.updateShelf}
+			                         shelf={book.shelf}
+			                         bookItem={book}
 			                    />
 			                </li>
 	                   	)}
