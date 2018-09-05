@@ -1,4 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import Book from './Book'
 import { Link } from 'react-router-dom'
 
 /* 
@@ -9,12 +11,34 @@ import { Link } from 'react-router-dom'
 
 class BookSearch extends React.Component {
 
-    /* State contains query of search */
+    /* Search required props */
+	static propTypes = {
+		onSearch: PropTypes.func.isRequired,
+		onUpdateShelf: PropTypes.func.isRequired
+	}
+
+    /* State contains query of search and currently searched books */
 	state = {
-		query: ""
+		query: "",
+		searchedBooks: []
+	}
+
+	/* 
+	   Update query with latest user input. 
+	   Also, conduct the BooksAPI search passed down 
+	   from the parent app and show searched books
+    */
+	updateQuery = (query) => {
+		this.setState({query: query})
+		this.props.onSearch(query).then((searchResults) => {
+			this.setState({ searchedBooks: searchResults })
+		})
 	}
 
 	render() {
+
+		const { query } = this.state
+
 		return <div className="search-books">
 		           <div className="search-books-bar">
 		               {/* Close search - Link to home route */}
@@ -28,11 +52,27 @@ class BookSearch extends React.Component {
 				               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
 				               you don't find a specific author or title. Every search is limited by search terms.
 				           */}
-			                <input type="text" value={this.state} placeholder="Search by title or author"/>
+			                <input type="text" 
+			                       value={query}
+			                       placeholder="Search by title or author"
+			                       onChange={(event) => this.updateQuery(event.target.value)}
+			                />
 		               </div>
 		           </div>
 	               <div className="search-books-results">
-		               <ol className="books-grid"></ol>
+		               <ol className="books-grid">
+		                   {/* Map search results, but first validate that there is
+		                       indeed a results array to map*/}
+			               {this.state.searchedBooks && 
+			               	this.state.searchedBooks.length > 0 && 
+			               	this.state.searchedBooks.map((book) => (
+				               <Book
+				                   key={book.id}
+		                           onUpdateShelf={this.props.onUpdateShelf}
+			                       bookItem={book}
+				               />
+			               	))} 
+		               </ol>
 		           </div>
 	           </div>
 	}

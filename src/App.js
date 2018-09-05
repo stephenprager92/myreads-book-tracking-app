@@ -10,28 +10,21 @@ class BooksApp extends React.Component {
 
   state = {
     /* 
-      Collection of all books in app (both displayed and not)
-      Since this is the parent component of the app, this should 
-      hold the book data and pass it down to child components when required
+      Collection of all books currently in the home app. Since this is the 
+      parent component of the app, this should hold the book data and pass 
+      it down to child components when required
     */
     books: []
   }
 
-  /*
-    Helper method - asynchronously retrieve book data from the BooksAPI
-    Once retrieved, set the new state.
+  /* 
+    Asynchronously retrieve book data for the first time AFTER
+    the app component initially mounts. Once retrieved, set the new state
   */
-  retrieveBooks() {
+  componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books : books })
     })
-  }
-
-  /* 
-    Retrieve books for the first time AFTER the app component initially mounts
-  */
-  componentDidMount() {
-    this.retrieveBooks()
   }
 
   /*
@@ -44,10 +37,36 @@ class BooksApp extends React.Component {
     while doing the API first takes longer. Ultimately made a judgment call.
   */
   updateShelf = (book, shelf) => {
+
+    // Find the book's current shelf in a new array
+    const updateIndex = this.state.books.findIndex((b) => b.id === book.id)
+    const updatedBookList = this.state.books
+
+    // If we couldn't find the index, book is not yet on 
+    // any shelf. Set it and then add it in
+    if (updateIndex === -1) {
+      book.shelf = shelf
+      updatedBookList.push(book)
+    }
+    // Otherwise, update its current shelf and then the state
+    else {
+      updatedBookList[updateIndex].shelf = shelf
+    }
+
+    this.setState({
+      books: updatedBookList
+    })
+
+    // Update the API
     BooksAPI.update(book, shelf)
-            .then(() => {
-            this.retrieveBooks()
-            })
+  }
+
+  /* 
+     Search for a book based on user query, 
+     then return those books to the component to be saved
+  */
+  searchForBook = (query) => {
+      return BooksAPI.search(query)
   }
 
   render() {
@@ -55,7 +74,10 @@ class BooksApp extends React.Component {
       <div className="app">
         {/*Here we are adding Routes to replace the state dependent page management */}
         <Route path="/search" render={() => ( 
-          <BookSearch/>
+          <BookSearch
+            onSearch={this.searchForBook}
+            onUpdateShelf={this.updateShelf}
+          />
         )}/>
         <Route exact path="/" render={() => (
           <div className="list-books">

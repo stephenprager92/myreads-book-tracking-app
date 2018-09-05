@@ -12,32 +12,40 @@ class Book extends React.Component {
 
     /* Book required props */
 	static propTypes = {
-		title: PropTypes.string.isRequired,
-		authors: PropTypes.array.isRequired,
-		imageURL: PropTypes.string.isRequired,
-		onUpdateShelf: PropTypes.func.isRequired,
-		shelf: PropTypes.string.isRequired,
+		// id: PropTypes.string.isRequired,
+		// title: PropTypes.string.isRequired,
+		// authors: PropTypes.array.isRequired,
+		// imageURL: PropTypes.string.isRequired,
+		// onUpdateShelf: PropTypes.func.isRequired,
+		// shelf: PropTypes.string.isRequired,
 		bookItem: PropTypes.object.isRequired
 	}
 
 	render() {
 
-		const { title, authors, onUpdateShelf, imageURL, shelf, bookItem } = this.props
+		const { bookItem, onUpdateShelf } = this.props
 
-		return <div className="book">
-			       <div className="book-top">
-			           <div className="book-cover" style={{ width: 128, height: 192, backgroundImage:`url(${imageURL})` }}></div>
-                       <BookShelfChanger
-	                       onUpdateShelf={onUpdateShelf}
-	                       shelf={shelf}
-	                       bookItem={bookItem}
-                       />
-                   </div>
-                   <div className="book-title">{title}</div>
-                   <div className="book-authors">
-	                   {authors.join(", ")}
-                   </div>
-               </div>
+		return <li>
+				   <div className="book">
+				       <div className="book-top">
+				           <div className="book-cover" style={{ width: 128, 
+				           	                                    height: 192, 
+				           	                                    backgroundImage:((bookItem.imageLinks && bookItem.imageLinks.smallThumbnail) ? 
+				           	                                                      `url(${bookItem.imageLinks.smallThumbnail})` : "none")}}></div>
+	                       <BookShelfChanger
+		                       onUpdateShelf={onUpdateShelf}
+		                       shelf={bookItem.shelf}
+		                       bookItem={bookItem}
+	                        />
+	                   </div>
+	                   <div className="book-title">{bookItem.title}</div>
+	                   <div className="book-authors">
+		                   {/*If there's more than one author, join the array of names appropriately*/}
+		                   {(bookItem.authors && bookItem.authors.length) > 1 ? 
+		                    bookItem.authors.join(", ") : bookItem.authors}
+	                   </div>
+	               </div>
+               </li> 
     }
 }
 
