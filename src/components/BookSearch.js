@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Book from './Book'
 import { Link } from 'react-router-dom'
+import * as BooksAPI from '../BooksAPI' 
 
 /* 
 	BookSearch.js
@@ -13,7 +14,7 @@ class BookSearch extends React.Component {
 
     /* Search required props */
 	static propTypes = {
-		onSearch: PropTypes.func.isRequired,
+		storedBooks: PropTypes.array.isRequired,
 		onUpdateShelf: PropTypes.func.isRequired
 	}
 
@@ -29,8 +30,28 @@ class BookSearch extends React.Component {
 	   from the parent app and show searched books
     */
 	updateQuery = (query) => {
+
+		const { storedBooks } = this.props
+		
+		// First, set state with the query (since for fast typers 
+		// the query can move faster than the asynchronous search)
 		this.setState({query: query})
-		this.props.onSearch(query).then((searchResults) => {
+		
+		// Search the Books API. If a search result is in our app's list 
+		// of shelved books, assign the appropriate shelf in the search view.
+		BooksAPI.search(query).then((searchResults) => {
+			if (searchResults && searchResults.length > 0) {
+				for (let i = 0; i < searchResults.length; i++) {
+					for (let j = 0; j < storedBooks.length; j++) {
+						if (searchResults[i].id === storedBooks[j].id) {
+							const shelvedBookIndex = storedBooks.findIndex((book) => book.id === searchResults[i].id)
+							searchResults[i].shelf = storedBooks[shelvedBookIndex].shelf
+						}
+					}
+				}
+			}			
+
+            // When appropriate shelves have been assigned, set state with the searched books
 			this.setState({ searchedBooks: searchResults })
 		})
 	}

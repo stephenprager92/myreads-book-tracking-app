@@ -22,7 +22,6 @@ class BookShelf extends React.Component {
 	               <h2 className="bookshelf-title">{this.props.title}</h2>
                    <div className="bookshelf-books">
 	                   <ol className="books-grid">
-	               {/* Step 1 - cut out these attributes and just use what's needed (book) */}
 	                   {this.props.books.map((book) =>  
 		                       <Book key={book.id}
 			                         onUpdateShelf={this.props.updateShelf}

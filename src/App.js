@@ -28,13 +28,8 @@ class BooksApp extends React.Component {
   }
 
   /*
-    Update a book's shelf first in the API, then in the local state
+    Update a book's shelf first in the local state, then in the API
     Used by the BookShelfChanger components
-
-    NOTE: I'm not sure what's better practice here, updating the local shelf first
-    or updating the API. Doing the local shelf first has the disadvantage of potentially
-    not saving a change you thought you made (if you can't reach the server), 
-    while doing the API first takes longer. Ultimately made a judgment call.
   */
   updateShelf = (book, shelf) => {
 
@@ -61,21 +56,14 @@ class BooksApp extends React.Component {
     BooksAPI.update(book, shelf)
   }
 
-  /* 
-     Search for a book based on user query, 
-     then return those books to the component to be saved
-  */
-  searchForBook = (query) => {
-      return BooksAPI.search(query)
-  }
-
   render() {
     return (
       <div className="app">
         {/*Here we are adding Routes to replace the state dependent page management */}
         <Route path="/search" render={() => ( 
           <BookSearch
-            onSearch={this.searchForBook}
+            // onSearch={this.searchForBook}
+            storedBooks={this.state.books}
             onUpdateShelf={this.updateShelf}
           />
         )}/>

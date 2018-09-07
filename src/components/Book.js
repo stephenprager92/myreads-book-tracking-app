@@ -12,12 +12,7 @@ class Book extends React.Component {
 
     /* Book required props */
 	static propTypes = {
-		// id: PropTypes.string.isRequired,
-		// title: PropTypes.string.isRequired,
-		// authors: PropTypes.array.isRequired,
-		// imageURL: PropTypes.string.isRequired,
-		// onUpdateShelf: PropTypes.func.isRequired,
-		// shelf: PropTypes.string.isRequired,
+		onUpdateShelf: PropTypes.func.isRequired,
 		bookItem: PropTypes.object.isRequired
 	}
 
@@ -28,10 +23,12 @@ class Book extends React.Component {
 		return <li>
 				   <div className="book">
 				       <div className="book-top">
-				           <div className="book-cover" style={{ width: 128, 
-				           	                                    height: 192, 
-				           	                                    backgroundImage:((bookItem.imageLinks && bookItem.imageLinks.smallThumbnail) ? 
-				           	                                                      `url(${bookItem.imageLinks.smallThumbnail})` : "none")}}></div>
+				           <div className="book-cover" 
+					            style={{ width: 128, 
+				           	             height: 192, 
+				           	             /* Use the background image as thumbnail, but only if there IS one */
+				           	             backgroundImage:((bookItem.imageLinks && bookItem.imageLinks.smallThumbnail) ? 
+				           	                               `url(${bookItem.imageLinks.smallThumbnail})` : "none")}}></div>
 	                       <BookShelfChanger
 		                       onUpdateShelf={onUpdateShelf}
 		                       shelf={bookItem.shelf}

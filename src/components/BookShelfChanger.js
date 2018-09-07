@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 /* 
 	BookShelfChanger.js
 	React component for a book shelf changer in myReads Book Tracker App
+	Note one of these components is assigned to each book instance
 	Author: Steve Prager
 */
 
